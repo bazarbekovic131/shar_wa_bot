@@ -1,0 +1,5 @@
+flask
+twilio
+flask-cors
+python-dotenv
+psycopg2
