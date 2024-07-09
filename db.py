@@ -77,3 +77,19 @@ class WADatabase():
             cur.execute("SELECT has_completed_survey FROM users WHERE phone = %s", (phone,))
             result = cur.fetchone()
             return result and result[0]
+
+    ######## VACANCIES ##############
+
+    def get_vacancies(self):
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT id, title FROM vacancies")
+            return cursor.fetchall()
+
+    def get_vacancy_details(self, vacancy_id):
+        with self.connection.cursor() as cursor:
+            cursor.execute("SELECT title, requirements, details FROM vacancies WHERE id=%s", (vacancy_id,))
+            return cursor.fetchone()
+
+    # def save_resume(self, resume_path):
+    #     # Implement the method to save resume to a specified path
+    #     pass

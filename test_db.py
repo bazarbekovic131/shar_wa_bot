@@ -1,9 +1,12 @@
+from db import WADatabase
+
 if __name__ == "__main__":
     db_config = {
-        'host': 'your_db_host',
-        'database': 'your_db_name',
-        'user': 'your_db_user',
-        'password': 'your_db_password'
+        'host': 'localhost',
+        'database': 'shark_wa',
+        'user': 'bazarbekovic',
+        'password': 'bazarbekovic',
+        'port': '5432'
     }
 
     # Initialize the database
