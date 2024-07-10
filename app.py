@@ -78,12 +78,14 @@ def webhook():
     conversation = client.conversations.v1.conversations.create(
         friendly_name="Friendly Conversation"
     )
+    vacancies = database.get_vacancies()
 
     if ('ваканс' in message or 'работ' in message):
         response.message('Отлично! У нас есть несколько открытых позиций: \n Инженер-строитель\n Прораб\n Архитектор\n Оператор строительной техники\n Менеджер по проектам\n')
         send_vacancies(from_number)
-    # elif ('инженер' in message):
-    #     response.message('Данные по инженеру')
+    elif (vacancy_title in message for id, vacancy_title in vacancies):
+        some_data = database.get_vacancy_details(id)
+        send_whatsapp_message(from_number, some_data)
     else:
         response.message('Пожалуйста, повторите запрос. Может быть, вы ищете работу?')
 
