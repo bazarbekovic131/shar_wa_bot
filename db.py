@@ -94,8 +94,7 @@ class WADatabase():
     def get_vacancies(self):
         with self.conn.cursor() as cursor:
             cursor.execute("SELECT id, title FROM vacancies")
-            df = pd.DataFrame(cursor.fetchall())
-            return df
+            return cursor.fetchall()
 
     def get_vacancy_details(self, vacancy_id):
         with self.conn.cursor() as cursor:
@@ -106,6 +105,3 @@ class WADatabase():
     # def save_resume(self, resume_path):
     #     # Implement the method to save resume to a specified path
     #     pass
-
-
-print()

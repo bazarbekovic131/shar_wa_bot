@@ -1,4 +1,5 @@
 import os
+import uuid
 import logging
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -69,7 +70,7 @@ def test_send_message():
 
 @app.route('/whatsapp-form', methods = ['GET', 'POST'])
 def webhook():
-    data = request.json
+    data = request.form
     response = MessagingResponse()
     from_number = data.get('From').replace('whatsapp:', '')
     message =  data.get('Body').strip().lower()
@@ -78,10 +79,11 @@ def webhook():
         friendly_name="Friendly Conversation"
     )
 
-    if ('ваканс' in message or 'работ' in message ):
+    if ('ваканс' in message or 'работ' in message):
         response.message('Отлично! У нас есть несколько открытых позиций: \n Инженер-строитель\n Прораб\n Архитектор\n Оператор строительной техники\n Менеджер по проектам\n')
-    elif ('инженер' in message):
-        response.message('Данные по инженеру')
+        send_vacancies(from_number)
+    # elif ('инженер' in message):
+    #     response.message('Данные по инженеру')
     else:
         response.message('Пожалуйста, повторите запрос. Может быть, вы ищете работу?')
 
@@ -89,24 +91,16 @@ def webhook():
 
     return "OK", 200
 
-@app.route("/message", methods = ['GET', 'POST'])
-def reply():
-    """Handle incoming messages and check product availability."""
-    data = request.form  # Get form data
-    body = data.get('Body', '')  # Extract 'Body' from form data
-    message = body.lower()  # Convert message to lowercase
-
+@app.route("/vacancy_list", methods = ['GET', 'POST'])
+def send_vacancies(from_number):
+    """Handle incoming messages and answer with vacancy list."""
     vacancies = database.get_vacancies()
     
-    for vacancy in vacancies:
-        id, title, amount = vacancy
-        if title.lower() in message:
-            id = str(uuid.uuid4())
-            message = f"Your order is placed for {title}. This is the tracking id: {id}."
-            return send_message(message)
-    
-    message = "The product you mentioned is not available at the moment."
-    return send_message(message)
+    message = "Доступны следующие вакансии\n\n"
+    for id, vacancy in vacancies:
+        message = message + "\n" + f"{id}. {vacancy}"
+    logging.info(f'Message to be sent: {message}')
+    send_whatsapp_message(from_number, message)
 
 
 def test_reply():
