@@ -20,7 +20,7 @@ class WADatabase():
                         id SERIAL PRIMARY KEY,
                         phone VARCHAR(32) UNIQUE NOT NULL,
                         has_completed_survey BOOLEAN DEFAULT FALSE
-                        )""")
+                        );""")
             
             cur.execute("""CREATE TABLE IF NOT EXISTS surveys (
                         id SERIAL PRIMARY KEY,
@@ -32,7 +32,17 @@ class WADatabase():
                         completed_survey BOOLEAN,
                         phone VARCHAR(16) UNIQUE NOT NULL,
                         FOREIGN KEY (phone) REFERENCES users (phone)
-                        )""")
+                        );""")
+
+            create_table_query = '''
+                        CREATE TABLE IF NOT EXISTS vacancies (
+                            id SERIAL PRIMARY KEY,
+                            title VARCHAR(255) NOT NULL,
+                            requirements TEXT,
+                            details TEXT
+                        );'''
+            cur.execute(create_table_query)
+
             self.conn.commit()
 
     def get_user(self, phone):

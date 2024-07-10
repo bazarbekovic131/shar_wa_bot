@@ -1,16 +1,19 @@
+import os
+import logging
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from db import WADatabase
 import requests
-import logging
-logging.basicConfig(level=logging.INFO, format = '%(asctime)s - %(levelname)s - %(message)s')
+from db import WADatabase
 from twilio.rest import Client
+from twilio.twiml.messaging_response import MessagingResponse
 from dotenv import load_dotenv
-import os
-# from decouple import config
+
+
+
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
+logging.basicConfig(level=logging.INFO, format = '%(asctime)s - %(levelname)s - %(message)s')
 
 ####### Conversation state tracking #########
 user_states = {}
@@ -64,13 +67,57 @@ def test_send_message():
 
 ############### HR Handler #################
 
-@app.route('/whatsapp-form', methods = ['POST'])
+@app.route('/whatsapp-form', methods = ['GET', 'POST'])
 def webhook():
-    data = request.form
-    from_number = data.get('from').replace('whatsapp:', '')
-    message_body = data.get('body').strip()
+    data = request.json
+    response = MessagingResponse()
+    from_number = data.get('From').replace('whatsapp:', '')
+    message =  data.get('Body').strip().lower()
 
-    # Handle conversation flow
+    conversation = client.conversations.v1.conversations.create(
+        friendly_name="Friendly Conversation"
+    )
+
+    if ('ваканс' in message or 'работ' in message ):
+        response.message('Отлично! У нас есть несколько открытых позиций: \n Инженер-строитель\n Прораб\n Архитектор\n Оператор строительной техники\n Менеджер по проектам\n')
+    elif ('инженер' in message):
+        response.message('Данные по инженеру')
+    else:
+        response.message('Пожалуйста, повторите запрос. Может быть, вы ищете работу?')
+
+    # func_survey(from_number, message) # Handle survey flow
+
+    return "OK", 200
+
+@app.route("/message", methods = ['GET', 'POST'])
+def reply():
+    """Handle incoming messages and check product availability."""
+    data = request.form  # Get form data
+    body = data.get('Body', '')  # Extract 'Body' from form data
+    message = body.lower()  # Convert message to lowercase
+
+    vacancies = database.get_vacancies()
+    
+    for vacancy in vacancies:
+        id, title, amount = vacancy
+        if title.lower() in message:
+            id = str(uuid.uuid4())
+            message = f"Your order is placed for {title}. This is the tracking id: {id}."
+            return send_message(message)
+    
+    message = "The product you mentioned is not available at the moment."
+    return send_message(message)
+
+
+def test_reply():
+    response = MessagingResponse()
+
+    response.message('Спасибо Вам за выделенное время!')
+
+    return str(response)
+
+
+def func_survey(from_number, message_body):
     if from_number not in user_states:
         # New user interaction
         if database.has_completed_survey(from_number):
@@ -91,8 +138,6 @@ def webhook():
                 save_survey_responses(from_number, state['responses'])
                 send_whatsapp_message(from_number, "Спасибо за участие в опросе. Свяжитесь с нами по телефону.")
                 del user_states[from_number]
-
-    return "OK", 200
 
 def save_survey_responses(phone, responses):
     results = {
