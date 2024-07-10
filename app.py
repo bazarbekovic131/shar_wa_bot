@@ -91,7 +91,6 @@ def webhook():
 
     return "OK", 200
 
-
 def send_vacancies(from_number):
     """Handle incoming messages and answer with vacancy list."""
     vacancies = database.get_vacancies()
@@ -109,6 +108,11 @@ def test_reply():
     response.message('Спасибо Вам за выделенное время!')
 
     return str(response)
+
+@app.route('/callback', methods = ['POST', 'GET'])
+def callback_option():
+    data = request.form
+    button_text = data.get(['ButtonText'])
 
 
 def func_survey(from_number, message_body):
