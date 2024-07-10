@@ -41,6 +41,6 @@ if __name__ == "__main__":
     # Initialize the database
     db = WADatabase(db_config)
 
-    vacancies = db.get_vacancies
+    vacancies = db.get_vacancies()
     print(vacancies)
  
