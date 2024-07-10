@@ -1,16 +1,7 @@
 from db import WADatabase
 
-if __name__ == "__main__":
-    db_config = {
-        'host': 'localhost',
-        'database': 'shark_whatsapp',
-        'user': 'shark',
-        'password': 'shark',
-        'port': '5432'
-    }
 
-    # Initialize the database
-    db = WADatabase(db_config)
+def test1():
     db.create_tables()
 
     # Example phone number
@@ -36,3 +27,20 @@ if __name__ == "__main__":
         print(f"Survey results saved for phone: {phone}")
     else:
         print(f"User with phone: {phone} has already completed the survey.")
+
+
+if __name__ == "__main__":
+    db_config = {
+        'host': 'localhost',
+        'database': 'shark_whatsapp',
+        'user': 'shark',
+        'password': 'shark',
+        'port': '5432'
+    }
+
+    # Initialize the database
+    db = WADatabase(db_config)
+
+    vacancies = db.get_vacancies
+    print(vacancies)
+ 

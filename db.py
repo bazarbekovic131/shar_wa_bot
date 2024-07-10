@@ -103,3 +103,6 @@ class WADatabase():
     # def save_resume(self, resume_path):
     #     # Implement the method to save resume to a specified path
     #     pass
+
+
+print()
