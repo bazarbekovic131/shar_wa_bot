@@ -91,7 +91,7 @@ def webhook():
 
     return "OK", 200
 
-@app.route("/vacancy_list", methods = ['GET', 'POST'])
+
 def send_vacancies(from_number):
     """Handle incoming messages and answer with vacancy list."""
     vacancies = database.get_vacancies()
