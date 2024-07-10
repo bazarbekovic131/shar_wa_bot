@@ -1,5 +1,5 @@
 from db import WADatabase
-
+import pandas as pd
 
 def test1():
     db.create_tables()
