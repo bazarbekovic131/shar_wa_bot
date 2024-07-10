@@ -43,4 +43,7 @@ if __name__ == "__main__":
 
     vacancies = db.get_vacancies()
     print(vacancies)
+    for vacancy in vacancies:
+        message = f" Название позиции {vacancy['title']}"
+        print(message)
  

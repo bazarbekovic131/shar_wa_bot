@@ -1,4 +1,5 @@
 import psycopg2
+import pandas as pd
 
 class WADatabase():
     #### create tables users and surveys for now ###
@@ -93,12 +94,14 @@ class WADatabase():
     def get_vacancies(self):
         with self.conn.cursor() as cursor:
             cursor.execute("SELECT id, title FROM vacancies")
-            return cursor.fetchall()
+            df = pd.DataFrame(cursor.fetchall())
+            return df
 
     def get_vacancy_details(self, vacancy_id):
         with self.conn.cursor() as cursor:
             cursor.execute("SELECT title, requirements, details FROM vacancies WHERE id=%s", (vacancy_id,))
-            return cursor.fetchone()
+            df = pd.DataFrame(cursor.fetchone())
+            return df
 
     # def save_resume(self, resume_path):
     #     # Implement the method to save resume to a specified path

@@ -2,4 +2,4 @@ flask
 twilio
 flask-cors
 python-dotenv
-psycopg2
+psycopg2-binary
