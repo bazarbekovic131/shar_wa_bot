@@ -3,9 +3,9 @@ from db import WADatabase
 if __name__ == "__main__":
     db_config = {
         'host': 'localhost',
-        'database': 'shark_wa',
-        'user': 'bazarbekovic',
-        'password': 'bazarbekovic',
+        'database': 'shark_whatsapp',
+        'user': 'shark',
+        'password': 'shark',
         'port': '5432'
     }
 
