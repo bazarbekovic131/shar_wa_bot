@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO, format = '%(asctime)s - %(levelname)s - 
 from twilio.rest import Client
 from dotenv import load_dotenv
 import os
-from decouple import config
+# from decouple import config
 load_dotenv()
 app = Flask(__name__)
 CORS(app)
