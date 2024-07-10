@@ -91,12 +91,12 @@ class WADatabase():
     ######## VACANCIES ##############
 
     def get_vacancies(self):
-        with self.connection.cursor() as cursor:
+        with self.conn.cursor() as cursor:
             cursor.execute("SELECT id, title FROM vacancies")
             return cursor.fetchall()
 
     def get_vacancy_details(self, vacancy_id):
-        with self.connection.cursor() as cursor:
+        with self.conn.cursor() as cursor:
             cursor.execute("SELECT title, requirements, details FROM vacancies WHERE id=%s", (vacancy_id,))
             return cursor.fetchone()
 
