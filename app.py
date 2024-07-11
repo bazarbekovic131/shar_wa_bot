@@ -26,6 +26,9 @@ survey_questions = [
     "Имеются ли дети: 1) да, 2) нет"
 ]
 
+# Allowed media types
+ALLOWED_MEDIA_TYPES = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+
 ################ DOC-V    ###################
 
 @app.route('/send_message', methods=['POST'])
@@ -79,6 +82,24 @@ def webhook():
         friendly_name="Friendly Conversation"
     )
     vacancies = database.get_vacancies()
+
+    # Check if the message has media
+    # num_media = int(request.form.get("NumMedia", 0))
+    # if num_media > 0:
+    #     media_url = request.form.get("MediaUrl0")
+    #     media_type = request.form.get("MediaContentType0")
+
+    #     # Check if the media type is allowed
+    #     if media_type in ALLOWED_MEDIA_TYPES:
+    #         # Download and process the media file
+    #         media_content = requests.get(media_url).content
+    #         # Save the file or process it as needed
+    #         with open(f"uploaded_file_{os.path.basename(media_url)}", "wb") as file:
+    #             file.write(media_content)
+            
+    #         response.message("Спасибо! Ваше резюме успешно загружено. Мы свяжемся с вами в ближайшее время.")
+    #     else:
+    #         response.message("Пожалуйста, загрузите резюме в формате PDF или Word.")
 
     if ('ваканс' in message or 'работ' in message): # list vacancies
         response.message('Отлично! У нас есть несколько открытых позиций:', from_number)
