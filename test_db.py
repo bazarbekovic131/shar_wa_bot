@@ -31,8 +31,8 @@ def test1():
 def test2():
     vacancies = db.get_vacancies()
     print(vacancies)
-    for vacancy in vacancies:
-        message = f" Название позиции {vacancy['title']}"
+    for idx, vacancy in vacancies:
+        message = f" Название позиции {vacancy}"
         print(message)
 
 if __name__ == "__main__":
