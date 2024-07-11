@@ -28,6 +28,12 @@ def test1():
     else:
         print(f"User with phone: {phone} has already completed the survey.")
 
+def test2():
+    vacancies = db.get_vacancies()
+    print(vacancies)
+    for vacancy in vacancies:
+        message = f" Название позиции {vacancy['title']}"
+        print(message)
 
 if __name__ == "__main__":
     db_config = {
@@ -40,10 +46,12 @@ if __name__ == "__main__":
 
     # Initialize the database
     db = WADatabase(db_config)
-
     vacancies = db.get_vacancies()
-    print(vacancies)
-    for vacancy in vacancies:
-        message = f" Название позиции {vacancy['title']}"
-        print(message)
+    for idx, vacancy_title in vacancies:
+        if vacancy_title in message:
+            some_data = db.get_vacancy_details(idx)
+            print(some_data)
+            break
+
+
  

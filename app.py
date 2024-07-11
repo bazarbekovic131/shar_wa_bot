@@ -80,12 +80,14 @@ def webhook():
     )
     vacancies = database.get_vacancies()
 
-    if ('ваканс' in message or 'работ' in message):
-        response.message('Отлично! У нас есть несколько открытых позиций: \n Инженер-строитель\n Прораб\n Архитектор\n Оператор строительной техники\n Менеджер по проектам\n')
+    if ('ваканс' in message or 'работ' in message): # list vacancies
+        response.message('Отлично! У нас есть несколько открытых позиций:', from_number)
         send_vacancies(from_number)
-    elif (vacancy_title in message for id, vacancy_title in vacancies):
-        some_data = database.get_vacancy_details(id)
-        send_whatsapp_message(from_number, some_data)
+    for idx, vacancy_title in vacancies: # vacancy details
+        if vacancy_title in message:
+            some_data = database.get_vacancy_details(idx)
+            send_whatsapp_message(from_number, some_data)
+            break
     else:
         response.message('Пожалуйста, повторите запрос. Может быть, вы ищете работу?')
 
