@@ -99,7 +99,7 @@ class WADatabase():
     def get_vacancy_details(self, vacancy_id):
         with self.conn.cursor() as cursor:
             cursor.execute("SELECT title, requirements, details FROM vacancies WHERE id=%s", (vacancy_id,))
-            df = pd.DataFrame(cursor.fetchone())
+            df = cursor.fetchone()
             return df
 
     # def save_resume(self, resume_path):

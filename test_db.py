@@ -47,10 +47,14 @@ if __name__ == "__main__":
     # Initialize the database
     db = WADatabase(db_config)
     vacancies = db.get_vacancies()
+    test2()
+
+    message = input('Vacancy title:')
     for idx, vacancy_title in vacancies:
-        if vacancy_title in message:
-            some_data = db.get_vacancy_details(idx)
-            print(some_data)
+        if message.lower() in vacancy_title.lower():
+            data = db.get_vacancy_details(idx)
+            processed_data = f'Вакансия: {data[0]}\n\n Требования:\n {data[1]}\n\n  Условия работы:\n {data[2]}'
+            print(processed_data)
             break
 
 

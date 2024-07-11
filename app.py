@@ -83,11 +83,12 @@ def webhook():
     if ('ваканс' in message or 'работ' in message): # list vacancies
         response.message('Отлично! У нас есть несколько открытых позиций:', from_number)
         send_vacancies(from_number)
-    for idx, vacancy_title in vacancies: # vacancy details
-        if vacancy_title in message:
-            some_data = database.get_vacancy_details(idx)
-            send_whatsapp_message(from_number, some_data)
-            break
+
+        for idx, vacancy_title in vacancies: # vacancy details
+            if vacancy_title.lower() in message:
+                some_data = database.get_vacancy_details(idx)
+                send_whatsapp_message(from_number, some_data)
+                break
     else:
         response.message('Пожалуйста, повторите запрос. Может быть, вы ищете работу?')
 
@@ -99,12 +100,15 @@ def send_vacancies(from_number):
     """Handle incoming messages and answer with vacancy list."""
     vacancies = database.get_vacancies()
     
-    message = "Доступны следующие вакансии\n\n"
+    message = "Отлично! У нас есть несколько открытых позиций:\n\n"
     for id, vacancy in vacancies:
         message = message + "\n" + f"{id}. {vacancy}"
     logging.info(f'Message to be sent: {message}')
     send_whatsapp_message(from_number, message)
 
+def send_vacancy_details(from_number, data):
+    message = f'Вакансия: {data[0]}\n\n Требования:\n {data[1]}\n\n  Условия работы:\n {data[2]}'
+    send_whatsapp_message(from_number, message)
 
 def test_reply():
     response = MessagingResponse()
